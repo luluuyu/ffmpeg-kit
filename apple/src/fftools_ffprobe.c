@@ -24,6 +24,9 @@
  */
 
 /*
+ * CHANGES 10.2021
+ * - exit_program() calls replaced with return statements to gracefully return from functions
+ *
  * CHANGES 01.2020
  * - ffprobe support changes
  * - Concurrent execution support
@@ -2969,7 +2972,7 @@ static int open_input_file(InputFile *ifile, const char *filename, const char *p
     fmt_ctx = avformat_alloc_context();
     if (!fmt_ctx) {
         print_error(filename, AVERROR(ENOMEM));
-        exit_program(1);
+        return -1;
     }
 
     if (!av_dict_get(format_opts, "scan_all_pmts", NULL, AV_DICT_MATCH_CASE)) {
@@ -3400,7 +3403,7 @@ static void opt_input_file(void *optctx, const char *arg)
         av_log(NULL, AV_LOG_ERROR,
                 "Argument '%s' provided as input filename, but '%s' was already specified.\n",
                 arg, input_filename);
-        exit_program(1);
+        return;
     }
     if (!strcmp(arg, "-"))
         arg = "pipe:";
